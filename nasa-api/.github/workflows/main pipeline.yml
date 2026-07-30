@@ -51,3 +51,15 @@ jobs:
         content: "Hey <@800100468763263047>, the deployment pipeline has failed. Check the status below."
         image: ${{ secrets.EMBED_IMAGE }}
         color: 0xff0000
+  tag_release:
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+    needs: [build_and_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: false
+          DEFAULT_BUMP: patch
