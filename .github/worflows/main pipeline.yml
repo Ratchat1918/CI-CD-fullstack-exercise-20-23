@@ -1,0 +1,42 @@
+name: Main pipeline
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+      - name: Install dependencies
+        run: npm install
+      - name: Style check
+        run: npm run lint
+      - name: Build
+        run: npm run build
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright test
+        run: npm run test
+  notify_deployment:
+    needs: [building_and_testing]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send a notification to fullstack_webhook
+      uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        status: ${{ needs.building_and_testing.result }}
+        content: "Hey <@800100468763263047>, the deployment pipeline has completed. Check the status below."
+        image: ${{ secrets.EMBED_IMAGE }}
+        color: ${{ needs.building_and_testing.result == 'failure' && '0xff0000' || '0x00ff00' }}
