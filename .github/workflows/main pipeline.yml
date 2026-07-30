@@ -27,16 +27,27 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright test
         run: npm run test
-  notify_deployment:
-    needs: [building_and_testing]
+  notify_success:
+    needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
       uses: sarisia/actions-status-discord@v1
-      if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        status: ${{ needs.building_and_testing.result }}
+        status: ${{ needs.build_and_test.result }}
         content: "Hey <@800100468763263047>, the deployment pipeline has completed. Check the status below."
         image: ${{ secrets.EMBED_IMAGE }}
-        color: ${{ needs.building_and_testing.result == 'failure' && '0xff0000' || '0x00ff00' }}
+        color: ${{ needs.build_and_test.result == 'failure' && '0xff0000' || '0x00ff00' }}
+  notify_failure:
+    if: ${{ needs.build_and_test.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send a notification to fullstack_webhook
+      uses: sarisia/actions-status-discord@v1
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        status: ${{ needs.build_and_test.result }}
+        content: "Hey <@800100468763263047>, the deployment pipeline has failed. Check the status below."
+        image: ${{ secrets.EMBED_IMAGE }}
+        color: 0xff0000
