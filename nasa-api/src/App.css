@@ -1,0 +1,14 @@
+.header{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.image-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.image-container img{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin: 10px;
+}
