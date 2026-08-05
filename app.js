@@ -1,31 +1,37 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:5173'
-}))
+
+app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send('Server is running!');
-});
-
-app.get('/health', (req, res) => {
-  res.send('ok')
-})
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/api/nasa', async (req, res) => {
-    try {
-        const webResponse = await fetch('https://images-api.nasa.gov/search?q=air%20show&media_type=image&year_start=2020&year_end=2026');
-        const data = await webResponse.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching data from NASA API:', error);
-        res.status(500).json({ error: 'Failed to fetch data from NASA API' });
-    }
+  try {
+    const webResponse = await fetch('https://images-api.nasa.gov/search?q=air%20show&media_type=image&year_start=2020&year_end=2026');
+    const data = await webResponse.json();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch data from NASA API' });
+  }
+});
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}/api/nasa`);
+  console.log(`Server running on port http://localhost:${PORT}`);
 });

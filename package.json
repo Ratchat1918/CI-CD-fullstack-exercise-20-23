@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start-prod": "node app.js",
-    "test:server": "npx concurrently \"npm run start-prod\" \"npm run dev\"",
+    "start": "node app.js",
+    "test:server": "npx concurrently \"npm run start\" \"npm run dev\"",
     "test": "playwright test"
   },
   "dependencies": {
