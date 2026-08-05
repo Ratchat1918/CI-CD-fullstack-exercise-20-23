@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for nasa-api on 2026-07-30T19:06:01+03:00
+# fly.toml app configuration file generated for nasa-api on 2026-08-05T15:41:33+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,12 +7,11 @@ app = 'nasa-api'
 primary_region = 'arn'
 
 [build]
-
 [env]
-PORT=3000
+  PORT = '3000'
 
 [processes]
-app = 'node app.js'
+  app = 'node app.js'
 
 [http_service]
   internal_port = 3000

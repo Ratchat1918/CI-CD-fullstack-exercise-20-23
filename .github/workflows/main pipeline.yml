@@ -34,8 +34,8 @@ jobs:
       - name: Run Playwright test
         run: npm run test
   notify_success:
-    needs: [build_and_test]
-    if: ${{ needs.build_and_test.result == 'success' }}
+    needs: [build_and_test, deploy_to_fly]
+    if: ${{ needs.build_and_test.result == 'success' && needs.deploy_to_fly.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
@@ -47,8 +47,8 @@ jobs:
         image: ${{ secrets.EMBED_IMAGE }}
         color: 0x00ff00
   notify_failure:
-    needs: [build_and_test]
-    if: ${{ needs.build_and_test.result == 'failure' }}
+    needs: [build_and_test, deploy_to_fly]
+    if: ${{ needs.build_and_test.result == 'failure' || needs.deploy_to_fly.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
@@ -60,7 +60,7 @@ jobs:
         color: 0xff0000
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
-    needs: [build_and_test, deploy_to_fly]
+    needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
