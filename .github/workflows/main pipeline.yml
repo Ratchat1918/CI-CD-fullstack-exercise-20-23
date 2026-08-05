@@ -8,11 +8,17 @@ on:
       - main
     types: [opened, synchronize]
 
+permissions:
+  contents: write
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
@@ -28,6 +34,8 @@ jobs:
       - name: Run Playwright test
         run: npm run test
   notify_success:
+    needs: [build_and_test]
+    if: ${{ needs.build_and_test.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
@@ -37,7 +45,7 @@ jobs:
         status: ${{ needs.build_and_test.result }}
         content: "Hey <@800100468763263047>, the deployment pipeline has completed. Check the status below."
         image: ${{ secrets.EMBED_IMAGE }}
-        color: ${{ needs.build_and_test.result == 'failure' && '0xff0000' || '0x00ff00' }}
+        color: 0x00ff00
   notify_failure:
     needs: [build_and_test]
     if: ${{ needs.build_and_test.result == 'failure' }}
@@ -49,7 +57,6 @@ jobs:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
         status: ${{ needs.build_and_test.result }}
         content: "Hey <@800100468763263047>, the deployment pipeline has failed. Check the status below."
-        image: ${{ secrets.EMBED_IMAGE }}
         color: 0xff0000
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
@@ -57,6 +64,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
         env:
