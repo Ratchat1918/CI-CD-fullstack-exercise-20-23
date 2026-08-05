@@ -60,7 +60,7 @@ jobs:
         color: 0xff0000
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
-    needs: [build_and_test]
+    needs: [build_and_test, deploy_to_fly]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -73,3 +73,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRY_RUN: false
           DEFAULT_BUMP: patch
+  deploy_to_fly:
+    needs: [build_and_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy to flyctl
+        if: ${{ github.event_name != 'pull_request' }}
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
