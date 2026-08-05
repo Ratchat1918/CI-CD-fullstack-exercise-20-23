@@ -89,6 +89,7 @@ jobs:
           DRY_RUN: false
           DEFAULT_BUMP: patch
   deploy_to_fly:
+    if: ${{ github.event_name == 'push }}
     needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
