@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for ci-cd-fullstack-exercise-20-23 on 2026-08-05T17:32:10+03:00
+# fly.toml app configuration file generated for ci-cd-fullstack-exercise-20-23 on 2026-08-05T19:10:42+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -8,13 +8,13 @@ primary_region = 'arn'
 
 [build]
 [env]
-  PORT = "8043"
+  PORT = '8043'
 
 [processes]
-  app = "npm start"
+  app = 'npm start'
 
 [http_service]
-  internal_port = 8043
+  internal_port = 80
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
