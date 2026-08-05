@@ -6,13 +6,13 @@
 app = 'ci-cd-fullstack-exercise-20-23'
 primary_region = 'arn'
 
+[build]
 [env]
   PORT = "8043"
 
 [processes]
   app = "npm start"
 
-[build]
 [http_service]
   internal_port = 8043
   force_https = true

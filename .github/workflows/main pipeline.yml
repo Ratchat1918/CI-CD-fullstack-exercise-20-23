@@ -47,15 +47,15 @@ jobs:
         image: ${{ secrets.EMBED_IMAGE }}
         color: 0x00ff00
   notify_failure:
-    needs: [build_and_test, deploy_to_fly]
-    if: ${{ needs.build_and_test.result == 'failure'}}
+    needs: [ deploy_to_fly]
+    if: ${{ needs.deploy_to_fly.result == 'failure'}}
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
       uses: sarisia/actions-status-discord@v1
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        status: ${{ needs.build_and_test.result }}
+        status: ${{ needs.deploy_to_fly.result }}
         content: "Hey <@800100468763263047>, the deployment pipeline has failed. Check the status below."
         color: 0xff0000
   tag_release:
