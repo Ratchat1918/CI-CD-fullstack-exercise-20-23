@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for nasa-api on 2026-08-05T15:41:33+03:00
+# fly.toml app configuration file generated for fs-pokedex-plucky-night-289 on 2026-07-02T19:27:59+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -8,10 +8,10 @@ primary_region = 'arn'
 
 [build]
 [env]
-  PORT = '3000'
+  PORT="3000"
 
 [processes]
-  app = 'node app.js'
+  app = "node app.js"
 
 [http_service]
   internal_port = 3000
@@ -20,7 +20,7 @@ primary_region = 'arn'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
-  
+
 [[http_service.checks]]
   grace_period = "10s"
   interval = "30s"
