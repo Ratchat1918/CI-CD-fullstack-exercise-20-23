@@ -7,6 +7,8 @@ app = 'nasa-api'
 primary_region = 'arn'
 
 [build]
+  command = "npm install && npm run build"
+
 [env]
   PORT="3000"
 
