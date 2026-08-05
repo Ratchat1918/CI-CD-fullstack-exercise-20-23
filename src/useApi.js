@@ -7,7 +7,7 @@ export const useApi = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    axios.get('http://localhost:8043/api/nasa')
+    axios.get('/api/nasa')
       .then(response => {
         setData(response.data)
         setLoading(false)
