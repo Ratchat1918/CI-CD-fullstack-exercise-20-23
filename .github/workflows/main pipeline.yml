@@ -28,7 +28,6 @@ jobs:
       - name: Run Playwright test
         run: npm run test
   notify_success:
-    needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
     - name: Send a notification to fullstack_webhook
@@ -40,6 +39,7 @@ jobs:
         image: ${{ secrets.EMBED_IMAGE }}
         color: ${{ needs.build_and_test.result == 'failure' && '0xff0000' || '0x00ff00' }}
   notify_failure:
+    needs: [build_and_test]
     if: ${{ needs.build_and_test.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
