@@ -32,6 +32,7 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 8043;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Listening at http://localhost:${PORT}`);
-});
+const start = async () => {
+  await app.listen(PORT)
+  console.log(`server started on port ${PORT}`)
+}
