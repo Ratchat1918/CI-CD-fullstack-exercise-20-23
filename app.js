@@ -31,10 +31,7 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const PORT = Number(process.env.PORT || 8043);
-const HOST = '0.0.0.0';
-
-app.listen(PORT, HOST, () => {
-  console.log(`Server running on http://${HOST}:${PORT}`);
-  console.log(`Local server running on http://localhost:${PORT}`);
+const PORT = process.env.PORT || 8043;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Listening at http://localhost:${PORT}`);
 });
