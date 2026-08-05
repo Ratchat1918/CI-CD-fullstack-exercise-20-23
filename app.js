@@ -32,7 +32,6 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 8043;
-const start = async () => {
-  await app.listen(PORT)
-  console.log(`server started on port ${PORT}`)
-}
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`server started on port ${PORT}`);
+});
