@@ -7,14 +7,14 @@ app = 'ci-cd-fullstack-exercise-20-23'
 primary_region = 'arn'
 
 [env]
-  PORT = "3000"
+  PORT = "8043"
 
 [processes]
   app = "npm start"
 
 [build]
 [http_service]
-  internal_port = 3000
+  internal_port = 8043
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true

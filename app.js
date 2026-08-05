@@ -31,7 +31,7 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(process.env.PORT || 8043);
 const HOST = '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
