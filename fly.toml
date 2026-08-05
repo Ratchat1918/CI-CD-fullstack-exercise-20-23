@@ -6,8 +6,11 @@
 app = 'ci-cd-fullstack-exercise-20-23'
 primary_region = 'arn'
 
+[env]
+  PORT = "3000"
+
 [processes]
-  app = "node app.js"
+  app = "npm start"
 
 [build]
 [http_service]
